@@ -204,7 +204,7 @@ export async function PUT(req: NextRequest) {
       await sendDraftSavedEmail({
         to: contactEmail,
         contactName: contactName ?? "Contractor",
-        projectName: (invitation.projects as { name: string } | null)?.name ?? "Project",
+        projectName: (invitation.projects as unknown as { name: string } | null)?.name ?? "Project",
         trade: invitation.trade,
         formUrl,
       }).catch(() => {}); // Don't fail save if email fails

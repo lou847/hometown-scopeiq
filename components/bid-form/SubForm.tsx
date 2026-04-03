@@ -61,8 +61,8 @@ export function SubForm({ invitation, project, scopeItems, existingDraft }: Prop
 
   // Check if scope was updated after draft was started
   const scopeUpdated = existingDraft?.last_saved_at &&
-    (project as { scope_updated_at?: string }).scope_updated_at &&
-    new Date((project as { scope_updated_at: string }).scope_updated_at) >
+    (project as unknown as { scope_updated_at?: string }).scope_updated_at &&
+    new Date((project as unknown as { scope_updated_at: string }).scope_updated_at) >
     new Date(existingDraft.last_saved_at);
 
   return (
