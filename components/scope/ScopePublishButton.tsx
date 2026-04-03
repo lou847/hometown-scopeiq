@@ -9,9 +9,10 @@ interface Props {
   items: ScopeItem[];
 }
 
-export function ScopePublishButton({ projectId: _projectId, trade, items }: Props) {
+export function ScopePublishButton({ projectId, trade, items }: Props) {
   const published = items.every((i) => i.published);
   const unpublishedCount = items.filter((i) => !i.published).length;
+  const hasAnyPublished = items.some((i) => i.published);
 
   async function handlePublish() {
     const supabase = createClient();
@@ -21,6 +22,15 @@ export function ScopePublishButton({ projectId: _projectId, trade, items }: Prop
       .from("scope_items")
       .update({ published: true, published_at: new Date().toISOString() })
       .in("id", ids);
+
+    // If re-publishing (some items were already published), update scope_updated_at
+    // so in-progress subs see a "scope updated" banner
+    if (hasAnyPublished) {
+      await supabase
+        .from("projects")
+        .update({ scope_updated_at: new Date().toISOString() })
+        .eq("id", projectId);
+    }
 
     window.location.reload();
   }

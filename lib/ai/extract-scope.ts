@@ -1,7 +1,20 @@
+import { readFileSync } from "fs";
+import { resolve } from "path";
 import Anthropic from "@anthropic-ai/sdk";
+import { jsonrepair } from "jsonrepair";
 import type { AiScopeExtraction } from "@/lib/types";
 
-const anthropic = new Anthropic();
+function getApiKey(): string {
+  if (process.env.ANTHROPIC_API_KEY) return process.env.ANTHROPIC_API_KEY;
+  const envFile = readFileSync(resolve(process.cwd(), ".env.local"), "utf-8");
+  const match = envFile.match(/^ANTHROPIC_API_KEY=(.+)$/m);
+  if (!match) throw new Error("ANTHROPIC_API_KEY not found in .env.local");
+  return match[1].trim();
+}
+
+function getClient() {
+  return new Anthropic({ apiKey: getApiKey() });
+}
 
 const SYSTEM_PROMPT = `You are a construction scope extraction specialist.
 Read the provided construction documents and extract a structured scope checklist
@@ -43,9 +56,14 @@ Output JSON matching this schema:
   "reference_bid": null
 }`;
 
+export type ProgressCallback = (phase: string, pct: number) => void;
+
 export async function extractScope(
-  documents: { base64Data: string; fileName: string }[]
+  documents: { base64Data: string; fileName: string }[],
+  onProgress?: ProgressCallback
 ): Promise<AiScopeExtraction> {
+  onProgress?.("Preparing documents...", 5);
+
   const content: Anthropic.ContentBlockParam[] = [
     ...documents.map(
       (doc) =>
@@ -61,17 +79,49 @@ export async function extractScope(
     { type: "text", text: EXTRACTION_PROMPT },
   ];
 
-  const response = await anthropic.messages.create({
+  onProgress?.("Sending to AI...", 10);
+
+  const stream = getClient().messages.stream({
     model: "claude-sonnet-4-6",
-    max_tokens: 8000,
+    max_tokens: 32000,
     system: SYSTEM_PROMPT,
     messages: [{ role: "user", content }],
   });
+
+  // Track streaming progress based on output tokens
+  let tokenCount = 0;
+  const estimatedTokens = documents.length * 4000; // rough estimate per doc
+
+  stream.on("text", (text) => {
+    tokenCount += text.length / 4; // ~4 chars per token
+    const pct = Math.min(95, 10 + Math.round((tokenCount / estimatedTokens) * 85));
+    onProgress?.("AI analyzing drawings...", pct);
+  });
+
+  const response = await stream.finalMessage();
+
+  onProgress?.("Parsing results...", 96);
+
+  if (response.stop_reason === "max_tokens") {
+    throw new Error("AI output was truncated — try uploading fewer pages at once");
+  }
 
   const textBlock = response.content.find((b) => b.type === "text");
   if (!textBlock || textBlock.type !== "text") {
     throw new Error("No text response from AI");
   }
 
-  return JSON.parse(textBlock.text) as AiScopeExtraction;
+  let jsonText = textBlock.text.trim();
+  if (jsonText.startsWith("```")) {
+    jsonText = jsonText.replace(/^```(?:json)?\s*/, "").replace(/\s*```$/, "");
+  }
+
+  onProgress?.("Saving scope items...", 98);
+
+  try {
+    return JSON.parse(jsonText) as AiScopeExtraction;
+  } catch {
+    const repaired = jsonrepair(jsonText);
+    return JSON.parse(repaired) as AiScopeExtraction;
+  }
 }

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import { InvitationsTab } from "@/components/dashboard/InvitationsTab";
@@ -37,6 +38,14 @@ export default async function ProjectDetailPage({ params }: Props) {
         <h1 className="text-3xl font-bold">{project.name}</h1>
         <p className="text-gray-600">{project.address}</p>
         <p className="text-sm text-gray-500">GC: {project.gc_name}</p>
+        <div className="flex gap-3 mt-3">
+          <Link href={`/dashboard/${slug}/scope`} className="text-sm px-3 py-1.5 border rounded hover:bg-gray-50">
+            Manage Scope
+          </Link>
+          <Link href={`/dashboard/${slug}/compare`} className="text-sm px-3 py-1.5 border rounded hover:bg-gray-50">
+            Compare Bids
+          </Link>
+        </div>
       </div>
 
       {/* Summary cards */}
@@ -60,7 +69,17 @@ export default async function ProjectDetailPage({ params }: Props) {
           <InvitationsTab invitations={invitations ?? []} projectId={project.id} />
         </section>
         <section>
-          <h2 className="text-xl font-semibold mb-4">Submissions</h2>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-semibold">Submissions</h2>
+            {(submissions?.length ?? 0) > 0 && (
+              <a
+                href={`/api/export?project_id=${project.id}`}
+                className="px-4 py-2 text-sm border rounded hover:bg-gray-50"
+              >
+                Export to Excel
+              </a>
+            )}
+          </div>
           <SubmissionsTab submissions={submissions ?? []} projectSlug={slug} />
         </section>
       </div>

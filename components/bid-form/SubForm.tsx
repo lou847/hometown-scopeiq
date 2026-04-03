@@ -59,8 +59,22 @@ export function SubForm({ invitation, project, scopeItems, existingDraft }: Prop
     (r) => r.response === "excluded" || r.response === "clarify"
   );
 
+  // Check if scope was updated after draft was started
+  const scopeUpdated = existingDraft?.last_saved_at &&
+    (project as { scope_updated_at?: string }).scope_updated_at &&
+    new Date((project as { scope_updated_at: string }).scope_updated_at) >
+    new Date(existingDraft.last_saved_at);
+
   return (
     <div className="max-w-3xl mx-auto p-8">
+      {scopeUpdated && (
+        <div className="mb-6 p-4 bg-amber-50 border border-amber-300 rounded-lg">
+          <p className="text-amber-800 font-medium">Scope has been updated since you last saved.</p>
+          <p className="text-sm text-amber-700 mt-1">
+            Please review Section B carefully — some scope items may have changed.
+          </p>
+        </div>
+      )}
       <div className="mb-8">
         <h1 className="text-3xl font-bold">{project.name}</h1>
         <p className="text-gray-600">{project.address}</p>

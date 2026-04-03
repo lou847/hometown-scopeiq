@@ -1,6 +1,18 @@
+import { readFileSync } from "fs";
+import { resolve } from "path";
 import Anthropic from "@anthropic-ai/sdk";
 
-const anthropic = new Anthropic();
+function getApiKey(): string {
+  if (process.env.ANTHROPIC_API_KEY) return process.env.ANTHROPIC_API_KEY;
+  const envFile = readFileSync(resolve(process.cwd(), ".env.local"), "utf-8");
+  const match = envFile.match(/^ANTHROPIC_API_KEY=(.+)$/m);
+  if (!match) throw new Error("ANTHROPIC_API_KEY not found in .env.local");
+  return match[1].trim();
+}
+
+function getClient() {
+  return new Anthropic({ apiKey: getApiKey() });
+}
 
 const SYSTEM_PROMPT = `You are a construction bid proposal parser.
 Read the provided bid proposal PDF and extract structured data.
@@ -33,7 +45,7 @@ export interface ParsedReferenceBid {
 export async function parseReferenceBid(
   base64Data: string
 ): Promise<ParsedReferenceBid> {
-  const response = await anthropic.messages.create({
+  const response = await getClient().messages.create({
     model: "claude-sonnet-4-6",
     max_tokens: 4000,
     system: SYSTEM_PROMPT,
@@ -60,5 +72,10 @@ export async function parseReferenceBid(
     throw new Error("No text response from AI");
   }
 
-  return JSON.parse(textBlock.text) as ParsedReferenceBid;
+  let jsonText = textBlock.text.trim();
+  if (jsonText.startsWith("```")) {
+    jsonText = jsonText.replace(/^```(?:json)?\s*/, "").replace(/\s*```$/, "");
+  }
+
+  return JSON.parse(jsonText) as ParsedReferenceBid;
 }

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { sendSubmissionConfirmation, sendAdminNotification } from "@/lib/email";
+import { sendSubmissionConfirmation, sendAdminNotification, sendDraftSavedEmail } from "@/lib/email";
 import { v4 as uuid } from "uuid";
 import { isBelowMinimum } from "@/lib/idol-rates";
 
@@ -159,4 +159,57 @@ export async function POST(req: NextRequest) {
   }
 
   return NextResponse.json({ submission_id: submissionId });
+}
+
+export async function PUT(req: NextRequest) {
+  const supabase = await createClient();
+  const { invitation_id, form_state } = await req.json();
+
+  if (!invitation_id || !form_state) {
+    return NextResponse.json({ error: "Missing invitation_id or form_state" }, { status: 400 });
+  }
+
+  const expiresAt = new Date();
+  expiresAt.setDate(expiresAt.getDate() + 7);
+
+  await supabase.from("bid_drafts").upsert(
+    {
+      invitation_id,
+      form_state,
+      last_saved_at: new Date().toISOString(),
+      expires_at: expiresAt.toISOString(),
+    },
+    { onConflict: "invitation_id" }
+  );
+
+  // Update invitation status to in_progress if not already submitted
+  await supabase
+    .from("invitations")
+    .update({ status: "in_progress", draft_started_at: new Date().toISOString() })
+    .eq("id", invitation_id)
+    .in("status", ["not_started", "link_opened"]);
+
+  // Send magic link email if contact_email is in form_state
+  const contactEmail = form_state.contact_email as string | undefined;
+  const contactName = form_state.contact_name as string | undefined;
+  if (contactEmail) {
+    const { data: invitation } = await supabase
+      .from("invitations")
+      .select("token, trade, projects(name)")
+      .eq("id", invitation_id)
+      .single();
+
+    if (invitation) {
+      const formUrl = `${process.env.NEXT_PUBLIC_APP_URL}/submit/${invitation.token}`;
+      await sendDraftSavedEmail({
+        to: contactEmail,
+        contactName: contactName ?? "Contractor",
+        projectName: invitation.projects?.name ?? "Project",
+        trade: invitation.trade,
+        formUrl,
+      }).catch(() => {}); // Don't fail save if email fails
+    }
+  }
+
+  return NextResponse.json({ saved: true });
 }

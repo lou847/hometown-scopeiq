@@ -82,6 +82,29 @@ export async function sendSubmissionConfirmation(params: {
   });
 }
 
+export async function sendDraftSavedEmail(params: {
+  to: string;
+  contactName: string;
+  projectName: string;
+  trade: string;
+  formUrl: string;
+}) {
+  const { to, contactName, projectName, trade, formUrl } = params;
+
+  return resend.emails.send({
+    from: FROM_EMAIL,
+    to,
+    subject: `Your bid draft has been saved — ${projectName} (${trade})`,
+    html: `
+      <h2>Draft Saved</h2>
+      <p>Hello ${contactName},</p>
+      <p>Your bid draft for <strong>${projectName}</strong> (${trade}) has been saved. You can resume where you left off using the link below.</p>
+      <p><a href="${formUrl}" style="display:inline-block;padding:12px 24px;background:#1a1a1a;color:#fff;text-decoration:none;border-radius:6px;">Resume Bid Form</a></p>
+      <p>This link expires in 7 days.</p>
+    `,
+  });
+}
+
 export async function sendAdminNotification(params: {
   recipients: string[];
   companyName: string;
