@@ -62,18 +62,66 @@ export function SectionC({ formState, updateField, trade }: Props) {
       {isLumpSum ? (
         <div className="p-4 bg-amber-50 border border-amber-200 rounded">
           <p className="text-sm text-amber-800">
-            Lump-sum submissions will be flagged as <strong>Incomplete — No Classification Data</strong> in the admin dashboard.
+            Submissions without classification detail will be flagged as <strong>Incomplete — No Classification Data</strong> in the admin dashboard.
+            Subs who provide full classification detail will receive priority consideration.
           </p>
-          <div className="mt-3">
-            <label className="block text-sm font-medium mb-1">Lump Sum Total $</label>
-            <input
-              type="number"
-              value={(formState.lump_sum_total as number) ?? ""}
-              onChange={(e) => updateField("lump_sum_total", parseFloat(e.target.value))}
-              className="border rounded px-3 py-2 text-sm w-48"
-              step="0.01"
-            />
+          <div className="mt-4 grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm font-medium mb-1">Total Labor $</label>
+              <input
+                type="number"
+                value={(formState.lump_sum_labor as number) ?? ""}
+                onChange={(e) => updateField("lump_sum_labor", parseFloat(e.target.value) || 0)}
+                className="border rounded px-3 py-2 text-sm w-full"
+                step="0.01"
+                placeholder="0.00"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Total Material $</label>
+              <input
+                type="number"
+                value={(formState.lump_sum_material as number) ?? ""}
+                onChange={(e) => updateField("lump_sum_material", parseFloat(e.target.value) || 0)}
+                className="border rounded px-3 py-2 text-sm w-full"
+                step="0.01"
+                placeholder="0.00"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">OH&P %</label>
+              <input
+                type="number"
+                value={(formState.lump_sum_ohp_pct as number) ?? ""}
+                onChange={(e) => updateField("lump_sum_ohp_pct", parseFloat(e.target.value) || 0)}
+                className="border rounded px-3 py-2 text-sm w-full"
+                step="0.1"
+                placeholder="0.0"
+              />
+            </div>
           </div>
+          {((formState.lump_sum_labor as number) > 0 || (formState.lump_sum_material as number) > 0) && (
+            <div className="mt-3 pt-3 border-t border-amber-200 text-sm text-amber-900">
+              <div className="flex justify-between">
+                <span>Subtotal (Labor + Material):</span>
+                <span className="font-medium">
+                  ${(((formState.lump_sum_labor as number) || 0) + ((formState.lump_sum_material as number) || 0)).toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                </span>
+              </div>
+              <div className="flex justify-between mt-1">
+                <span>OH&P ({(formState.lump_sum_ohp_pct as number) || 0}%):</span>
+                <span className="font-medium">
+                  ${((((formState.lump_sum_labor as number) || 0) + ((formState.lump_sum_material as number) || 0)) * (((formState.lump_sum_ohp_pct as number) || 0) / 100)).toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                </span>
+              </div>
+              <div className="flex justify-between mt-1 font-semibold">
+                <span>Total Bid:</span>
+                <span>
+                  ${((((formState.lump_sum_labor as number) || 0) + ((formState.lump_sum_material as number) || 0)) * (1 + (((formState.lump_sum_ohp_pct as number) || 0) / 100))).toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                </span>
+              </div>
+            </div>
+          )}
         </div>
       ) : (
         <div>
