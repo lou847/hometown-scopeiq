@@ -96,6 +96,76 @@ export const IDOL_RATES: Omit<IdolRate, "id" | "updated_at">[] = [
 
   // ── Signage ─────────────────────────────────────────────────────────────
   { trade: "signage", classification: "Sign Hanger - Journeyman", base_wage: 38.50, fringe: 18.75, effective_date: "2026-03-02", county: "Cook" },
+
+  // ── Asphalt ─────────────────────────────────────────────────────────────
+  { trade: "asphalt", classification: "Laborer - Asphalt", base_wage: 46.10, fringe: 22.76, effective_date: "2026-03-02", county: "Cook" },
+
+  // ── Bathroom Accessories ────────────────────────────────────────────────
+  { trade: "bathroom_accessories", classification: "Carpenter - Journeyman", base_wage: 52.15, fringe: 32.55, effective_date: "2026-03-02", county: "Cook" },
+  { trade: "bathroom_accessories", classification: "Carpenter - Apprentice 1st Year", base_wage: 26.08, fringe: 17.70, effective_date: "2026-03-02", county: "Cook" },
+
+  // ── Countertops ─────────────────────────────────────────────────────────
+  { trade: "countertops", classification: "Marble/Tile/Terrazzo Finisher - Journeyman", base_wage: 49.00, fringe: 28.50, effective_date: "2026-03-02", county: "Cook" },
+
+  // ── Doors, Frames & Hardware ────────────────────────────────────────────
+  { trade: "doors_frames_hardware", classification: "Carpenter - Journeyman", base_wage: 52.15, fringe: 32.55, effective_date: "2026-03-02", county: "Cook" },
+  { trade: "doors_frames_hardware", classification: "Carpenter - Apprentice 1st Year", base_wage: 26.08, fringe: 17.70, effective_date: "2026-03-02", county: "Cook" },
+
+  // ── Epoxy ───────────────────────────────────────────────────────────────
+  { trade: "epoxy", classification: "Floor Layer - Journeyman", base_wage: 44.75, fringe: 26.30, effective_date: "2026-03-02", county: "Cook" },
+  { trade: "epoxy", classification: "Floor Layer - Apprentice 1st Year", base_wage: 22.38, fringe: 14.80, effective_date: "2026-03-02", county: "Cook" },
+
+  // ── Fire Alarm ──────────────────────────────────────────────────────────
+  { trade: "fire_alarm", classification: "Electrician - Journeyman (Inside)", base_wage: 57.75, fringe: 34.81, effective_date: "2026-03-02", county: "Cook" },
+  { trade: "fire_alarm", classification: "Electrician - Apprentice 1st Year", base_wage: 23.10, fringe: 14.98, effective_date: "2026-03-02", county: "Cook" },
+
+  // ── Landscaping ─────────────────────────────────────────────────────────
+  { trade: "landscaping", classification: "Laborer - Landscape", base_wage: 42.00, fringe: 20.50, effective_date: "2026-03-02", county: "Cook" },
+
+  // ── Low Voltage ─────────────────────────────────────────────────────────
+  { trade: "low_voltage", classification: "Electrician - Journeyman (Inside)", base_wage: 57.75, fringe: 34.81, effective_date: "2026-03-02", county: "Cook" },
+  { trade: "low_voltage", classification: "Electrician - Apprentice 1st Year", base_wage: 23.10, fringe: 14.98, effective_date: "2026-03-02", county: "Cook" },
+
+  // ── Millwork ────────────────────────────────────────────────────────────
+  { trade: "millwork", classification: "Carpenter - Millwright", base_wage: 52.15, fringe: 32.55, effective_date: "2026-03-02", county: "Cook" },
+
+  // ── Panoramic ───────────────────────────────────────────────────────────
+  { trade: "panoramic", classification: "Glazier - Journeyman", base_wage: 48.90, fringe: 30.00, effective_date: "2026-03-02", county: "Cook" },
+  { trade: "panoramic", classification: "Glazier - Apprentice 1st Year", base_wage: 24.45, fringe: 16.20, effective_date: "2026-03-02", county: "Cook" },
+
+  // ── Pavers ──────────────────────────────────────────────────────────────
+  { trade: "pavers", classification: "Cement Mason - Journeyman", base_wage: 49.50, fringe: 29.00, effective_date: "2026-03-02", county: "Cook" },
+  { trade: "pavers", classification: "Laborer - General", base_wage: 46.10, fringe: 22.76, effective_date: "2026-03-02", county: "Cook" },
+
+  // ── Paving ──────────────────────────────────────────────────────────────
+  { trade: "paving", classification: "Operating Engineer - Group 1", base_wage: 56.40, fringe: 33.45, effective_date: "2026-03-02", county: "Cook" },
+  { trade: "paving", classification: "Laborer - General", base_wage: 46.10, fringe: 22.76, effective_date: "2026-03-02", county: "Cook" },
+
+  // ── Pergola ─────────────────────────────────────────────────────────────
+  { trade: "pergola", classification: "Carpenter - Journeyman", base_wage: 52.15, fringe: 32.55, effective_date: "2026-03-02", county: "Cook" },
+  { trade: "pergola", classification: "Carpenter - Apprentice 1st Year", base_wage: 26.08, fringe: 17.70, effective_date: "2026-03-02", county: "Cook" },
+
+  // ── Polished Concrete ───────────────────────────────────────────────────
+  { trade: "polished_concrete", classification: "Cement Mason - Journeyman", base_wage: 49.50, fringe: 29.00, effective_date: "2026-03-02", county: "Cook" },
+  { trade: "polished_concrete", classification: "Cement Mason - Apprentice 1st Year", base_wage: 24.75, fringe: 16.00, effective_date: "2026-03-02", county: "Cook" },
+
+  // ── Shiplap ─────────────────────────────────────────────────────────────
+  { trade: "shiplap", classification: "Carpenter - Journeyman", base_wage: 52.15, fringe: 32.55, effective_date: "2026-03-02", county: "Cook" },
+  { trade: "shiplap", classification: "Carpenter - Apprentice 1st Year", base_wage: 26.08, fringe: 17.70, effective_date: "2026-03-02", county: "Cook" },
+
+  // ── Sprinkler ───────────────────────────────────────────────────────────
+  { trade: "sprinkler", classification: "Sprinkler Fitter - Journeyman", base_wage: 55.80, fringe: 31.65, effective_date: "2026-03-02", county: "Cook" },
+  { trade: "sprinkler", classification: "Sprinkler Fitter - Apprentice 1st Year", base_wage: 22.32, fringe: 14.20, effective_date: "2026-03-02", county: "Cook" },
+
+  // ── Steel ───────────────────────────────────────────────────────────────
+  { trade: "steel", classification: "Ironworker - Structural", base_wage: 53.50, fringe: 35.80, effective_date: "2026-03-02", county: "Cook" },
+
+  // ── Temp Fencing ────────────────────────────────────────────────────────
+  { trade: "temp_fencing", classification: "Laborer - General", base_wage: 46.10, fringe: 22.76, effective_date: "2026-03-02", county: "Cook" },
+
+  // ── Utilities ───────────────────────────────────────────────────────────
+  { trade: "utilities", classification: "Laborer - General", base_wage: 46.10, fringe: 22.76, effective_date: "2026-03-02", county: "Cook" },
+  { trade: "utilities", classification: "Operating Engineer - Group 1", base_wage: 56.40, fringe: 33.45, effective_date: "2026-03-02", county: "Cook" },
 ];
 
 /** Get all IDOL rates for a specific trade */

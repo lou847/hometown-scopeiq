@@ -37,6 +37,13 @@ export default async function ComparePage({ params }: Props) {
     .select("*")
     .eq("project_id", project.id);
 
+  const { data: legacyBids } = await supabase
+    .from("legacy_bids")
+    .select("*")
+    .eq("project_id", project.id)
+    .order("trade")
+    .order("vendor");
+
   return (
     <div className="max-w-full mx-auto p-8">
       <div className="mb-8">
@@ -48,6 +55,7 @@ export default async function ComparePage({ params }: Props) {
         submissions={submissions ?? []}
         scopeItems={scopeItems ?? []}
         referenceBids={referenceBids ?? []}
+        legacyBids={legacyBids ?? []}
       />
     </div>
   );

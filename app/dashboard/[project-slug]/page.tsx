@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import { InvitationsTab } from "@/components/dashboard/InvitationsTab";
 import { SubmissionsTab } from "@/components/dashboard/SubmissionsTab";
+import { LegacyBidsTab } from "@/components/dashboard/LegacyBidsTab";
 
 interface Props {
   params: Promise<{ "project-slug": string }>;
@@ -31,6 +32,13 @@ export default async function ProjectDetailPage({ params }: Props) {
     .select("*")
     .eq("project_id", project.id)
     .order("submitted_at", { ascending: false });
+
+  const { data: legacyBids } = await supabase
+    .from("legacy_bids")
+    .select("*")
+    .eq("project_id", project.id)
+    .order("trade")
+    .order("vendor");
 
   return (
     <div className="max-w-6xl mx-auto p-8">
@@ -84,6 +92,9 @@ export default async function ProjectDetailPage({ params }: Props) {
             )}
           </div>
           <SubmissionsTab submissions={submissions ?? []} projectSlug={slug} />
+        </section>
+        <section>
+          <LegacyBidsTab legacyBids={legacyBids ?? []} projectId={project.id} />
         </section>
       </div>
     </div>
