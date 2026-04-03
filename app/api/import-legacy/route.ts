@@ -126,10 +126,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "No readable sheet found" }, { status: 400 });
   }
 
-  const rows = XLSX.utils.sheet_to_json<Record<string, unknown>>(sheet);
+  const rows = XLSX.utils.sheet_to_json<Record<string, unknown>>(sheet, { defval: "" });
   if (!rows.length) {
-    return NextResponse.json({ error: "Sheet is empty" }, { status: 400 });
+    return NextResponse.json({ error: `Sheet "${sheetName}" has no rows. Available sheets: ${workbook.SheetNames.join(", ")}` }, { status: 400 });
   }
+
+  // Debug: check what columns we have
+  const firstRow = rows[0];
+  const colKeys = Object.keys(firstRow);
 
   // Delete existing legacy bids for clean re-import
   await supabase.from("legacy_bids").delete().eq("project_id", projectId);
@@ -137,22 +141,22 @@ export async function POST(req: NextRequest) {
   // Map rows to legacy_bids records
   const records = rows
     .filter((row) => {
-      // Must have at least a trade and vendor
-      const trade = row["Trade"] ?? row["trade"] ?? row["TRADE"];
-      const vendor = row["Vendor"] ?? row["vendor"] ?? row["VENDOR"] ?? row["Subcontractor"] ?? row["Company"];
-      return trade && vendor;
+      // Must have at least a trade and vendor - try multiple possible column names
+      const trade = row["Trade"] ?? row["trade"] ?? row["TRADE"] ?? row[colKeys[0]];
+      const vendor = row["Vendor"] ?? row["vendor"] ?? row["VENDOR"] ?? row["Subcontractor"] ?? row["Company"] ?? row[colKeys[1]];
+      return trade && String(trade).trim() !== "";
     })
     .map((row) => {
-      const tradeRaw = String(row["Trade"] ?? row["trade"] ?? row["TRADE"] ?? "");
-      const vendor = String(row["Vendor"] ?? row["vendor"] ?? row["VENDOR"] ?? row["Subcontractor"] ?? row["Company"] ?? "");
-      const bidAmount = parseBidAmount(row["Bid Amount"] ?? row["bid_amount"] ?? row["Amount"] ?? row["Total"]);
-      const fileType = row["File"] ?? row["file_type"] ?? row["File Type"] ?? null;
-      const pwRaw = String(row["PW"] ?? row["pw"] ?? row["Prevailing Wage"] ?? "").trim().toUpperCase();
-      const detailScore = parseBidAmount(row["Detail Score"] ?? row["detail_score"] ?? row["Score"]);
-      const issues = row["Issues"] ?? row["issues"] ?? null;
-      const scopeNotes = row["Scope"] ?? row["scope_notes"] ?? row["Scope Notes"] ?? null;
-      const exclusions = row["Exclusions"] ?? row["exclusions"] ?? null;
-      const sourceFile = row["Source File"] ?? row["source_file"] ?? null;
+      const tradeRaw = String(row["Trade"] ?? row["trade"] ?? row["TRADE"] ?? row[colKeys[0]] ?? "");
+      const vendor = String(row["Vendor"] ?? row["vendor"] ?? row["VENDOR"] ?? row["Subcontractor"] ?? row["Company"] ?? row[colKeys[1]] ?? "");
+      const bidAmount = parseBidAmount(row["Bid Amount"] ?? row["bid_amount"] ?? row["Amount"] ?? row["Total"] ?? row[colKeys[2]]);
+      const fileType = row["File Type"] ?? row["File"] ?? row["file_type"] ?? row[colKeys[3]] ?? null;
+      const pwRaw = String(row["PW"] ?? row["pw"] ?? row["Prevailing Wage"] ?? row[colKeys[4]] ?? "").trim().toUpperCase();
+      const detailScore = parseBidAmount(row["Detail Score"] ?? row["detail_score"] ?? row["Score"] ?? row[colKeys[5]]);
+      const issues = row["Issues"] ?? row["issues"] ?? row[colKeys[6]] ?? null;
+      const scopeNotes = row["Scope"] ?? row["scope_notes"] ?? row["Scope Notes"] ?? row[colKeys[7]] ?? null;
+      const exclusions = row["Exclusions"] ?? row["exclusions"] ?? row[colKeys[8]] ?? null;
+      const sourceFile = row["File"] ?? row["Source File"] ?? row["source_file"] ?? row[colKeys[9]] ?? null;
 
       return {
         project_id: projectId,
@@ -170,7 +174,9 @@ export async function POST(req: NextRequest) {
     });
 
   if (!records.length) {
-    return NextResponse.json({ error: "No valid rows found in spreadsheet" }, { status: 400 });
+    return NextResponse.json({
+      error: `No valid rows found. Sheet: "${sheetName}", Total rows: ${rows.length}, Columns: [${colKeys.join(", ")}], First row sample: ${JSON.stringify(firstRow).substring(0, 200)}`
+    }, { status: 400 });
   }
 
   // Insert in batches of 100
