@@ -2,7 +2,7 @@ import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-const FROM_EMAIL = "ScopeIQ <noreply@scopeiq.app>";
+const FROM_EMAIL = "ScopeIQ <noreply@bids.hometowncoffeejuice.com>";
 
 export async function sendInvitationEmail(params: {
   to: string;
