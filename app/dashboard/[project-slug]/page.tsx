@@ -45,6 +45,9 @@ export default async function ProjectDetailPage({ params }: Props) {
           <Link href={`/dashboard/${slug}/compare`} className="text-sm px-3 py-1.5 border rounded hover:bg-gray-50">
             Compare Bids
           </Link>
+          <Link href={`/dashboard/${slug}/demo/electrical`} className="text-sm px-3 py-1.5 border border-amber-300 bg-amber-50 rounded hover:bg-amber-100">
+            Preview Sub Form
+          </Link>
         </div>
       </div>
 

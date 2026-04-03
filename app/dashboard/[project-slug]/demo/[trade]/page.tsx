@@ -25,15 +25,14 @@ export default async function DemoSubForm({ params }: Props) {
     .eq("trade", trade)
     .order("sort_order");
 
-  // Create a fake invitation for demo purposes
   const demoInvitation = {
     id: "demo",
     project_id: project.id,
-    company_name: "Demo Electrical Co.",
+    company_name: "Demo Contractor",
     contact_name: "John Smith",
     contact_email: "demo@example.com",
     contact_phone: "",
-    trade: trade,
+    trade,
     il_license_number: "",
     token: "demo",
     token_expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
@@ -48,9 +47,9 @@ export default async function DemoSubForm({ params }: Props) {
   };
 
   return (
-    <main className="min-h-screen bg-gray-50">
+    <div>
       <div className="bg-amber-100 text-amber-800 text-center py-2 text-sm font-medium">
-        DEMO MODE — This is a preview of the subcontractor bid form
+        DEMO MODE — Preview of the subcontractor bid form ({scopeItems?.length ?? 0} scope items)
       </div>
       <SubForm
         invitation={demoInvitation}
@@ -58,6 +57,6 @@ export default async function DemoSubForm({ params }: Props) {
         scopeItems={scopeItems ?? []}
         existingDraft={null}
       />
-    </main>
+    </div>
   );
 }
