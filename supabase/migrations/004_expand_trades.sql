@@ -1,0 +1,9 @@
+-- Add new trade values to the trade enum
+ALTER TYPE trade ADD VALUE IF NOT EXISTS 'painting';
+ALTER TYPE trade ADD VALUE IF NOT EXISTS 'drywall';
+ALTER TYPE trade ADD VALUE IF NOT EXISTS 'flooring';
+ALTER TYPE trade ADD VALUE IF NOT EXISTS 'roofing';
+ALTER TYPE trade ADD VALUE IF NOT EXISTS 'concrete';
+ALTER TYPE trade ADD VALUE IF NOT EXISTS 'demolition';
+ALTER TYPE trade ADD VALUE IF NOT EXISTS 'insulation';
+ALTER TYPE trade ADD VALUE IF NOT EXISTS 'signage';

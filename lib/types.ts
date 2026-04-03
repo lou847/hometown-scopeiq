@@ -10,6 +10,14 @@ export const TRADES = [
   "masonry",
   "fire_protection",
   "elevator",
+  "painting",
+  "drywall",
+  "flooring",
+  "roofing",
+  "concrete",
+  "demolition",
+  "insulation",
+  "signage",
   "other",
 ] as const;
 

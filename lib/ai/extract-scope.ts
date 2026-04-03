@@ -24,7 +24,8 @@ Do not include any text outside the JSON object.`;
 const EXTRACTION_PROMPT = `Analyze all provided construction documents and produce a unified scope checklist.
 
 For each scope item:
-- Group by trade: electrical, plumbing, hvac, civil, carpentry, glazing, masonry, fire_protection, elevator, other
+- Group by trade: electrical, plumbing, hvac, civil, carpentry, glazing, masonry, fire_protection, elevator, painting, drywall, flooring, roofing, concrete, demolition, insulation, signage, other
+- IMPORTANT: Look carefully for ALL trades in the drawings, including finishes (painting, flooring, drywall), sitework (concrete, demolition, civil), and specialty (signage, insulation, roofing). These are often found in architectural sheets (A-series), finish schedules, and specification notes — not just the MEP sheets.
 - Write a clear, specific scope description
 - Note the drawing sheet reference (e.g. "E4.0, E5.0")
 - Flag items marked FBO (furnished by owner — connection only)

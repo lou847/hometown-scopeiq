@@ -1,6 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 import { SubForm } from "@/components/bid-form/SubForm";
+import type { Trade } from "@/lib/types";
 
 interface Props {
   params: Promise<{ "project-slug": string; trade: string }>;
@@ -32,7 +33,7 @@ export default async function DemoSubForm({ params }: Props) {
     contact_name: "John Smith",
     contact_email: "demo@example.com",
     contact_phone: "",
-    trade: trade as "electrical" | "plumbing" | "hvac" | "civil" | "carpentry" | "glazing" | "masonry" | "fire_protection" | "elevator" | "other",
+    trade: trade as Trade,
     il_license_number: "",
     token: "demo",
     token_expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),

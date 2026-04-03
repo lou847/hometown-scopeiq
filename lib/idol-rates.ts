@@ -60,6 +60,42 @@ export const IDOL_RATES: Omit<IdolRate, "id" | "updated_at">[] = [
   // ── Elevator ─────────────────────────────────────────────────────────────
   { trade: "elevator", classification: "Elevator Constructor - Journeyman", base_wage: 62.54, fringe: 38.535, effective_date: "2026-03-02", county: "Cook" },
   { trade: "elevator", classification: "Elevator Constructor - Apprentice 1st Year", base_wage: 31.27, fringe: 22.27, effective_date: "2026-03-02", county: "Cook" },
+
+  // ── Painting ────────────────────────────────────────────────────────────
+  { trade: "painting", classification: "Painter - Journeyman", base_wage: 47.25, fringe: 27.90, effective_date: "2026-03-02", county: "Cook" },
+  { trade: "painting", classification: "Painter - Apprentice 1st Year", base_wage: 18.90, fringe: 12.50, effective_date: "2026-03-02", county: "Cook" },
+  { trade: "painting", classification: "Painter - Apprentice 2nd Year", base_wage: 23.63, fringe: 15.20, effective_date: "2026-03-02", county: "Cook" },
+  { trade: "painting", classification: "Painter - Apprentice 3rd Year", base_wage: 33.08, fringe: 19.60, effective_date: "2026-03-02", county: "Cook" },
+
+  // ── Drywall ─────────────────────────────────────────────────────────────
+  { trade: "drywall", classification: "Drywall Finisher - Journeyman", base_wage: 47.25, fringe: 27.90, effective_date: "2026-03-02", county: "Cook" },
+  { trade: "drywall", classification: "Drywall Finisher - Apprentice 1st Year", base_wage: 18.90, fringe: 12.50, effective_date: "2026-03-02", county: "Cook" },
+  { trade: "drywall", classification: "Carpenter (Drywall Framing) - Journeyman", base_wage: 52.15, fringe: 32.55, effective_date: "2026-03-02", county: "Cook" },
+
+  // ── Flooring ────────────────────────────────────────────────────────────
+  { trade: "flooring", classification: "Floor Layer - Journeyman", base_wage: 44.75, fringe: 26.30, effective_date: "2026-03-02", county: "Cook" },
+  { trade: "flooring", classification: "Floor Layer - Apprentice 1st Year", base_wage: 22.38, fringe: 14.80, effective_date: "2026-03-02", county: "Cook" },
+  { trade: "flooring", classification: "Tile Setter - Journeyman", base_wage: 49.00, fringe: 28.50, effective_date: "2026-03-02", county: "Cook" },
+
+  // ── Roofing ─────────────────────────────────────────────────────────────
+  { trade: "roofing", classification: "Roofer - Journeyman", base_wage: 48.50, fringe: 24.30, effective_date: "2026-03-02", county: "Cook" },
+  { trade: "roofing", classification: "Roofer - Apprentice 1st Year", base_wage: 24.25, fringe: 13.50, effective_date: "2026-03-02", county: "Cook" },
+
+  // ── Concrete ────────────────────────────────────────────────────────────
+  { trade: "concrete", classification: "Cement Mason - Journeyman", base_wage: 49.50, fringe: 29.00, effective_date: "2026-03-02", county: "Cook" },
+  { trade: "concrete", classification: "Cement Mason - Apprentice 1st Year", base_wage: 24.75, fringe: 16.00, effective_date: "2026-03-02", county: "Cook" },
+  { trade: "concrete", classification: "Laborer - Concrete", base_wage: 46.10, fringe: 22.76, effective_date: "2026-03-02", county: "Cook" },
+
+  // ── Demolition ──────────────────────────────────────────────────────────
+  { trade: "demolition", classification: "Laborer - Demolition", base_wage: 46.10, fringe: 22.76, effective_date: "2026-03-02", county: "Cook" },
+  { trade: "demolition", classification: "Operating Engineer - Demolition", base_wage: 56.40, fringe: 33.45, effective_date: "2026-03-02", county: "Cook" },
+
+  // ── Insulation ──────────────────────────────────────────────────────────
+  { trade: "insulation", classification: "Insulator - Journeyman (Heat & Frost)", base_wage: 54.90, fringe: 30.25, effective_date: "2026-03-02", county: "Cook" },
+  { trade: "insulation", classification: "Insulator - Apprentice 1st Year", base_wage: 21.96, fringe: 13.50, effective_date: "2026-03-02", county: "Cook" },
+
+  // ── Signage ─────────────────────────────────────────────────────────────
+  { trade: "signage", classification: "Sign Hanger - Journeyman", base_wage: 38.50, fringe: 18.75, effective_date: "2026-03-02", county: "Cook" },
 ];
 
 /** Get all IDOL rates for a specific trade */
