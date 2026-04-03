@@ -32,7 +32,7 @@ export default async function DemoSubForm({ params }: Props) {
     contact_name: "John Smith",
     contact_email: "demo@example.com",
     contact_phone: "",
-    trade,
+    trade: trade as "electrical" | "plumbing" | "hvac" | "civil" | "carpentry" | "glazing" | "masonry" | "fire_protection" | "elevator" | "other",
     il_license_number: "",
     token: "demo",
     token_expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
