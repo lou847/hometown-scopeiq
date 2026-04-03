@@ -3,11 +3,11 @@ import { notFound } from "next/navigation";
 import { SubForm } from "@/components/bid-form/SubForm";
 
 interface Props {
-  params: Promise<{ slug: string; trade: string }>;
+  params: Promise<{ "project-slug": string; trade: string }>;
 }
 
 export default async function DemoSubForm({ params }: Props) {
-  const { slug, trade } = await params;
+  const { "project-slug": slug, trade } = await params;
   const supabase = await createClient();
 
   const { data: project } = await supabase
@@ -23,7 +23,6 @@ export default async function DemoSubForm({ params }: Props) {
     .select("*")
     .eq("project_id", project.id)
     .eq("trade", trade)
-    .eq("published", true)
     .order("sort_order");
 
   // Create a fake invitation for demo purposes
